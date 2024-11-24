@@ -1,0 +1,86 @@
+avatar                        	162     	4     	8.50        	125 
+harry potter                  	120     	3     	7.80        	98  
+inception                     	148     	6     	9.00        	203 
+el viaje de chihiro           	125     	2     	8.20        	152 
+los vengadores                	143     	7     	8.68        	180 
+rapidos y furiosos            	107     	8     	7.30        	120 
+el senor de los anillos       	178     	5     	9.30        	220 
+la era del hielo              	101     	1     	6.90        	89  
+titanic                       	195     	4     	9.10        	300 
+jurassic park                 	127     	9     	8.50        	250 
+los guardianes de omega       	112     	6     	7.40        	110 
+el despertar del fenix        	134     	3     	7.90        	95  
+matrix                        	136     	6     	8.80        	180 
+el dragon perdido             	118     	2     	7.20        	86  
+reinos de fuego               	144     	8     	7.50        	122 
+las cronicas del tiempo       	132     	5     	7.60        	105 
+expedicion sin retorno        	115     	7     	7.10        	91  
+el secreto del mar            	103     	2     	6.80        	78  
+el castillo en el cielo       	124     	1     	8.40        	135 
+guerra eterna                 	167     	8     	7.70        	165 
+las sombras del pasado        	121     	4     	7.50        	100 
+bajo cero                     	110     	7     	6.90        	85  
+el ultimo horizonte           	140     	3     	7.80        	98  
+leyendas de arkania           	138     	6     	8.10        	130 
+mision alpha                  	105     	8     	6.70        	79  
+herencia maldita              	113     	9     	7.20        	91  
+universo paralelo             	160     	6     	8.00        	145 
+la caida de titanes           	142     	4     	7.90        	120 
+los ecos del manana           	122     	2     	6.60        	75  
+fuerza maxima                 	109     	7     	7.40        	88  
+ciudad en llamas              	116     	8     	7.30        	86  
+tormenta lunar                	126     	5     	7.80        	110 
+la rebelion de ares           	151     	3     	8.20        	140 
+el laberinto infinito         	139     	6     	8.00        	132 
+la isla olvidada              	104     	1     	6.90        	87  
+los portales de oro           	111     	4     	7.70        	98  
+saga eterna                   	185     	5     	8.90        	210 
+misterio en las sombras       	128     	9     	8.10        	135 
+rebeldes omega                	117     	7     	7.20        	88  
+tras el espejo                	114     	3     	7.00        	86  
+guerra en la galaxia          	150     	8     	8.50        	150 
+el bosque maldito             	106     	2     	6.80        	78  
+viaje a otro mundo            	130     	6     	7.70        	112 
+almas perdidas                	119     	4     	7.30        	89  
+codigo ancestral              	155     	5     	8.10        	138 
+dimensiones ocultas           	123     	7     	7.40        	97  
+el guardian de las sombras    	109     	9     	7.60        	102 
+cronicas de avalon            	118     	2     	7.10        	88  
+el pacto de hierro            	147     	8     	7.80        	120 
+sombras de guerra             	135     	6     	8.30        	133 
+guerreros de la aurora        	132     	5     	7.90        	110 
+el camino de orion            	113     	3     	7.00        	89  
+la ley del olvido             	116     	8     	7.40        	95  
+horizonte perdido             	121     	7     	7.60        	97  
+cazadores del abismo          	142     	4     	7.80        	110 
+el fin del dia                	125     	2     	6.90        	80  
+luz entre las sombras         	127     	9     	8.00        	130 
+guardianes del destino        	133     	6     	7.70        	115 
+reinos del caos               	129     	8     	7.50        	140 
+la marcha eterna              	108     	1     	6.70        	76  
+espejismo eterno              	137     	5     	7.90        	112 
+la sombra del cazador         	140     	7     	7.80        	108 
+rebelion final                	115     	3     	7.10        	87  
+los herederos del caos        	146     	6     	8.00        	120 
+memorias del viento           	134     	2     	7.30        	90  
+la hora del eclipse           	138     	4     	7.80        	110 
+los condenados                	152     	9     	7.90        	115 
+leyendas del abismo           	150     	5     	8.20        	130 
+guardianes del tiempo         	123     	7     	7.60        	99  
+el canto del amanecer         	118     	2     	7.10        	85  
+caminantes del silencio       	126     	8     	7.20        	87  
+las sombras olvidadas         	115     	3     	7.00        	86  
+legado de los titanes         	119     	6     	7.40        	95  
+destino sin nombre            	131     	4     	7.80        	108 
+el retorno de valhalla        	148     	5     	8.40        	145 
+la guerra sin fin             	154     	8     	8.10        	130 
+los siete reinos              	143     	1     	6.80        	84  
+la ultima cruzada             	144     	7     	7.70        	107 
+fragmentos de un sueno        	132     	2     	7.20        	80  
+eco de los condenados         	110     	9     	7.60        	100 
+renacer entre las cenizas     	137     	6     	8.00        	120 
+guardianes del olimpo         	159     	8     	8.30        	150 
+los ecos de la sombra         	118     	4     	7.40        	90  
+el portal del tiempo          	146     	3     	7.80        	100 
+la ultima luz                 	122     	7     	7.50        	91  
+secretos del abismo           	120     	5     	8.00        	125 
