@@ -17,146 +17,212 @@ void guardarLista(datos *alumnos, int tam);
 int cargarLista(datos **pelis);
 void eliminarPelicula(int *tam, datos **pelis, int *i);
 void ordenarPorGenero(datos* pelis, int tam);
+void imprimirEstrellas(float calificacion);
 
 int main() {
-    int tam = 0, op, i = 0;
-    char opc[10];
+    
+    int tam = 0, i = 0, numResultados;
+    int* resultados; 
     datos* pelis = (datos*)malloc(tam * sizeof(datos));
 
     tam = cargarLista(&pelis);
-    i = tam;
 
-    do {
+    char opc[10];
+    int op;
+    do
+    {
         system("cls || clear");
         menu();
         fgets(opc, sizeof(opc), stdin);
         op = atoi(opc);
         system("cls || clear");
-        switch (op) {
+        
+        switch (op) 
+        {
             case 1:
-                if (i > 0) 
+                if (tam == 0) 
 				{
-                    printf("NOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n\n");
-                    for (int j = 0; j < i; j++) {
-                        printf("%-30.30s\t%d\t\t%d\t%.2f\t\t%d\n", pelis[j].nombre, pelis[j].duracion, pelis[j].genero, pelis[j].calificacion, pelis[j].vista);
-                    }
-                } else {
-                    printf("No hay películas registradas en el sistema.\n");
+                    printf("No hay peliculas registradas en el sistema\n");
+                    break;
+                } 
+                printf("NOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n\n");
+                for (int i = 0; i < tam; i++) 
+                {
+                    printf("%-30.30s\t%d\t\t%d\t", pelis[i].nombre, pelis[i].duracion, pelis[i].genero);
+                    imprimirEstrellas(pelis[i].calificacion);
+                    printf("\t\t%d\n", pelis[i].vista);
                 }
-                break;
+            break;
             case 2:
-               if (i > 0) {
-                int numResultados;
-                int* resultados = busqueda(i, pelis, &numResultados);
-                if (numResultados > 0) {
-                printf("\nPelículas encontradas:\n");
-                printf("Índice\tNOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n");
-                for (int j = 0; j < numResultados; j++) {
-                int idx = resultados[j];
-                printf("%d\t%-30.30s\t%d\t\t%d\t%.2f\t\t%d\n", j + 1,
-                    pelis[idx].nombre, pelis[idx].duracion, pelis[idx].genero,
-                    pelis[idx].calificacion, pelis[idx].vista);
-            }
+                if (tam == 0) 
+                {
+                    printf("No hay peliculas registradas en el sistema.\n");
+                    break;
+                }
+                resultados = busqueda(tam, pelis, &numResultados);
+                if (numResultados == 0) 
+                {
+                    printf("\nNo se encontro ninguna pelicula con ese nombre.\n");
+                    break;
+                }
 
-            printf("\nSeleccione el índice de la película que desea ver (1-%d): ", numResultados);
-            int seleccion;
-            scanf("%d", &seleccion);
-            getchar(); // Limpiar el buffer
+                printf("\nPeliculas encontradas:\n");
+                printf("INDICE\tNOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n");
+                for (int i = 0; i < numResultados; i++) 
+                {
+                    int idx = resultados[i];
+                    printf("%d\t%-30.30s\t%d\t\t%d\t",i+1, pelis[idx].nombre, pelis[idx].duracion, pelis[idx].genero);
+                    imprimirEstrellas(pelis[idx].calificacion);
+                    printf("\t\t%d\n", pelis[idx].vista);    
+                }
 
-            if (seleccion > 0 && seleccion <= numResultados) {
+                printf("\nSeleccione el indice de la pelicula que desea ver (1-%d): ", numResultados);
+                int seleccion;
+                do 
+                {
+                    scanf("%d", &seleccion);
+                    getchar();
+                    if (seleccion < 1 || seleccion > numResultados) 
+                    {
+                        printf("\nSeleccion invalida. Por favor, elija un numero entre 1 y %d.\n", numResultados);
+                    }
+                }while (seleccion < 1 || seleccion > numResultados);
+
                 int idx = resultados[seleccion - 1];
-                printf("\nDetalles de la película seleccionada:\n");
+                printf("\nDetalles de la pelicula seleccionada:\n");
                 printf("NOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n");
-                printf("%-30.30s\t%d\t\t%d\t%.2f\t\t%d\n", pelis[idx].nombre,
-                    pelis[idx].duracion, pelis[idx].genero, pelis[idx].calificacion,
-                    pelis[idx].vista);
-
+                printf("%-30.30s\t%d\t\t%d\t", pelis[idx].nombre, pelis[idx].duracion, pelis[idx].genero);
+                imprimirEstrellas(pelis[idx].calificacion);
+                printf("\t\t%d\n", pelis[idx].vista);
                 pelis[idx].vista++;
-                printf("\nEn una escala del 1 al 5, ¿Qué calificación le pondría? ");
                 float calif;
-                scanf("%f", &calif);
-                getchar(); // Limpiar el buffer
-
-                pelis[idx].calificacion =
-                    ((pelis[idx].calificacion) * (pelis[idx].vista - 1) + calif) / pelis[idx].vista;
-
+                do
+                {
+                    printf("\nEn una escala del 0 al 5 (siendo 5 el maximo)... Que calificacion le pondria? ");
+                    scanf("%f", &calif);
+                    getchar();
+                    if(calif<0 || calif>5)
+                    printf("\nPor favor ingrese una calificacion valida\n");
+                }while(calif<0 || calif>5);
+                
+                pelis[idx].calificacion = ((pelis[idx].calificacion) * (pelis[idx].vista - 1) + calif) / pelis[idx].vista;
                 guardarLista(pelis, tam);
-            } else {
-                printf("Selección inválida.\n");
-            }
-        } else {
-            printf("No se encontró ninguna película con ese nombre.\n");
-        }
-        free(resultados);
-    } else {
-        printf("No hay películas registradas en el sistema.\n");
-    }
-    break;
+                free(resultados);
+            break;
             case 3:
                 tam++;
                 pelis = (datos*)realloc(pelis, tam * sizeof(datos));
-                registro(i, pelis);
-                i++;
+                registro(tam-1, pelis);
                 guardarLista(pelis, tam);
-                break;
+            break;
             case 4:
-                if (i > 0) {
-                int numResultados;
-                int* resultados = busqueda(i, pelis, &numResultados);
+                if (tam == 0) 
+                {
+                    printf("No hay peliculas registradas en el sistema.\n");
+                    break;
+                }
+                resultados = busqueda(tam, pelis, &numResultados);
                 if (numResultados > 0) 
                 {
-                    printf("\nPelículas encontradas:\n");
-                    printf("NOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTA\n");
-                    for (int j = 0; j < numResultados; j++) 
+                    printf("\nPeliculas encontradas:\n\n");
+                    printf("INDICE\tNOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTA\n");
+                    for (int i = 0; i < numResultados; i++) 
                     {
-                        int idx = resultados[j];
-                        printf("%-30.30s\t%d\t\t%d\t%.2f\t\t%d\n",
-                        pelis[idx].nombre, pelis[idx].duracion, pelis[idx].genero,
-                        pelis[idx].calificacion, pelis[idx].vista);
-                    }
-                }else 
+                        int idx = resultados[i];
+                        printf("%d\t%-30.30s\t%d\t\t%d\t",i+1, pelis[idx].nombre, pelis[idx].duracion, pelis[idx].genero);
+                        imprimirEstrellas(pelis[idx].calificacion);
+                        printf("\t\t%d\n", pelis[idx].vista);}
+                }else
                 {
-                printf("No se encontró ninguna película con ese nombre.\n");
+                printf("\nNo se encontro ninguna pelicula con ese nombre\n");
                 }
                 free(resultados);
-                } else {
-                printf("No hay películas registradas en el sistema.\n");
-                }
-    break;
+            break;
             case 5:
-            
-                if (i > 0) 
-				{
+                if (tam == 0) 
+                {
+                    printf("No hay peliculas registradas en el sistema.\n");
+                    break;
+                }
                     eliminarPelicula(&tam, &pelis, &i);
-                } else 
-				{
-                    printf("No hay pelis registradas en el sistema.\n");
-                }
-                break;
-                
+            break;    
             case 6:
-                if (i > 0) 
+                if (tam == 0) 
                 {
-                    ordenarPorGenero(pelis, i);
-                    printf("Peliculas ordenadas por genero:\n");
-                    printf("NOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n\n");
-                    for (int j = 0; j < i; j++) 
-                    {
-                        printf("%-30.30s\t%d\t\t%d\t%.2f\t\t%d\n", pelis[j].nombre, pelis[j].duracion, pelis[j].genero, pelis[j].calificacion, pelis[j].vista);
-                    }
-                } else 
-                {
-                    printf("No hay películas registradas en el sistema.\n");
+                    printf("No hay peliculas registradas en el sistema.\n");
+                    break;
                 }
-                break;
+                ordenarPorGenero(pelis, tam);
+                int generoAnterior = 0;
+    
+                printf("Peliculas ordenadas por genero:\n");
+    
+                for (int i = 0; i < tam; i++) 
+                {
+                    if (pelis[i].genero != generoAnterior) 
+                    {
+                        generoAnterior = pelis[i].genero;
+            
+                        switch (generoAnterior) 
+                        {
+                            case 1: 
+                                printf("\n\t\t[**Accion**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n"); 
+                            break;
+                            case 2: 
+                                printf("\n\t\t[**Aventura**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            case 3: 
+                                printf("\n\t\t[**Comedia**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            case 4: 
+                                printf("\n\t\t[**Drama**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            case 5: 
+                                printf("\n\t\t[**Ciencia Ficcion**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            case 6: 
+                                printf("\n\t\t[**Terror**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            case 7: 
+                                printf("\n\t\t[**Romantica**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            case 8: 
+                                printf("\n\t\t[**Misterio**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            case 9: 
+                                printf("\n\t\t[**Fantasia**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            case 10: 
+                                printf("\n\t\t[**Suspenso**]\n");
+                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+                            break;
+                            default: 
+                            break;
+                        }
+                    }
+        
+                    printf("%-30.30s\t%d\t\t", pelis[i].nombre, pelis[i].duracion);
+                    imprimirEstrellas(pelis[i].calificacion);
+                    printf("\t\t%d\n", pelis[i].vista);
+                }
+            break;
             case 7:
-                break;
+            break;
             case 8:
-                printf("Gracias por utilizar nuestro programa. ¡Adios!\n");
-                break;
+                printf("Gracias por utilizar nuestro programa. Adios!\n");
+            break;
             default:
                 printf("Opcion no valida. Por favor, intente nuevamente.\n");
-                break;
+            break;
         }
         printf("\nPresione ENTER para continuar...");
         getchar();
@@ -206,19 +272,19 @@ void registro(int i, datos *pelis) {
             printf("Por favor, ingrese una duracion valida (mayor a 0): ");
     } while (pelis[i].duracion <= 0);
 
-    printf("\nIngrese el genero de la pelicula segun corresponda: ");
+    printf("\nIngrese el genero de la pelicula segun corresponda:\n\n[Accion -> 1]\t[Aventura  -> 2]\t[Comedia  -> 3]\t[Drama    -> 4]\t[Ciencia Ficcion -> 5]\n[Terror -> 6]\t[Romantica -> 7]\t[Misterio -> 8]\t[Fantasia -> 9]\t[Suspenso       -> 10]\n\nGenero: ");
     do {
         scanf("%d", &pelis[i].genero);
 		getchar();
         if (pelis[i].genero <= 0)
             printf("Por favor, ingrese un genero valido: ");
-    } while (pelis[i].genero <= 0);
+    } while (pelis[i].genero <= 0 || pelis[i].genero > 10);
     
 	pelis[i].calificacion = 0;
 	
 	pelis[i].vista = 0;
 	
-	printf("\nPelícula registrada correctamente.\n");
+	printf("\nPelicula registrada correctamente.\n");
 }
 
 int* busqueda(int tam, datos* pelis, int* numResultados) {
@@ -259,7 +325,7 @@ void guardarLista(datos *pelis, int tam) {
     }
 
     fclose(archivo);
-    printf("\nLista de películas guardada correctamente en 'lista_pelis.txt'.\n");
+    printf("\nLista de peliculas guardada correctamente en 'lista_pelis.txt'.\n");
 }
 
 int cargarLista(datos **pelis) {
@@ -298,42 +364,46 @@ void eliminarPelicula(int *tam, datos **pelis, int *i) {
     int numResultados;
     int* resultados = busqueda(*tam, *pelis, &numResultados);
 
-    if (numResultados > 0) {
-        printf("\nPelículas encontradas:\n");
-        for (int j = 0; j < numResultados; j++) {
-            int idx = resultados[j];
-            printf("%d. %-30.30s\n", j + 1, (*pelis)[idx].nombre);
-        }
-
-        printf("\nSeleccione el índice de la película a eliminar (1-%d): ", numResultados);
-        int seleccion;
-        scanf("%d", &seleccion);
-        getchar(); // Limpiar el buffer
-
-        if (seleccion > 0 && seleccion <= numResultados) {
-            int idxEliminar = resultados[seleccion - 1];
-
-            printf("\nLa película '%s' ha sido eliminada de los registros.\n", (*pelis)[idxEliminar].nombre);
-
-            // Mover última película al índice a eliminar
-            (*pelis)[idxEliminar] = (*pelis)[*tam - 1];
-            (*tam)--;
-            (*i)--;
-
-            // Reasignar memoria
-            *pelis = realloc(*pelis, (*tam) * sizeof(datos));
-            if (*pelis == NULL && *tam > 0) {
-                printf("Error al reasignar memoria.\n");
-                exit(1);
-            }
-
-            guardarLista(*pelis, *tam);
-        } else {
-            printf("Selección inválida.\n");
-        }
-    } else {
-        printf("No se encontró ninguna película con el nombre especificado.\n");
+    if (numResultados == 0) 
+    {
+        printf("No se encontro ninguna pelicula con ese nombre.\n");
+        return;
     }
+
+    printf("\nPeliculas encontradas:\n");
+    for (int j = 0; j < numResultados; j++) 
+    {
+        int idx = resultados[j];
+        printf("%d. %-30.30s\n", j + 1, (*pelis)[idx].nombre);
+    }
+
+    printf("\nSeleccione el indice de la pelicula a eliminar (1-%d): ", numResultados);
+    int seleccion;   
+    do
+    {
+        scanf("%d", &seleccion);
+        getchar();
+        if (seleccion < 1 || seleccion > numResultados) 
+        {
+        printf("Seleccion invalida. Por favor, elija un numero entre 1 y %d.\n", numResultados);
+        }
+    }while (seleccion < 1 || seleccion > numResultados);
+    
+    int idxEliminar = resultados[seleccion - 1];
+
+    printf("\nLa pelicula %s ha sido eliminada de los registros.\n", (*pelis)[idxEliminar].nombre);
+
+    (*pelis)[idxEliminar] = (*pelis)[*tam - 1];
+    (*tam)--;
+
+    *pelis = realloc(*pelis, (*tam) * sizeof(datos));
+    if (*pelis == NULL && *tam > 0) 
+    {
+        printf("Error al reasignar memoria.\n");
+        exit(1);
+    }
+
+    guardarLista(*pelis, *tam);
 
     free(resultados);
 }
@@ -381,4 +451,13 @@ void ordenarPorGenero(datos* pelis, int tam) {
 
     free(count);
     free(output);
+}
+
+void imprimirEstrellas(float calificacion) {
+    int estrellas = (int)(calificacion + 0.5);
+    for (int i = 0; i < 5; i++) 
+    {
+        if (i < estrellas)
+            printf("*");
+    }
 }
