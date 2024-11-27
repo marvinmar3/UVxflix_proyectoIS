@@ -2,7 +2,7 @@ avatar                        	105     	4     	4.50        	912
 harry potter                  	109     	3     	2.80        	520 
 inception                     	115     	6     	5.00        	198 
 el viaje de chihiro           	120     	2     	3.20        	384 
-los vengadores                	116     	7     	1.68        	792 
+los vengadores                	116     	7     	1.68        	793 
 rapidos y furiosos            	106     	8     	4.30        	271 
 el senor de los anillos       	121     	5     	3.30        	248 
 la era del hielo              	100     	1     	1.90        	428 
@@ -69,7 +69,7 @@ leyendas del abismo           	115     	5     	1.20        	509
 guardianes del tiempo         	102     	7     	3.60        	92  
 el canto del amanecer         	118     	2     	4.10        	220 
 caminantes del silencio       	106     	8     	2.20        	350 
-las sombras olvidadas         	109     	3     	2.00        	345 
+las sombras olvidadas         	109     	3     	2.01        	346 
 legado de los titanes         	115     	6     	1.40        	293 
 destino sin nombre            	120     	4     	7.80        	611 
 el retorno de valhalla        	123     	5     	3.40        	448 
@@ -80,7 +80,7 @@ fragmentos de un sueno        	119     	2     	4.20        	553
 eco de los condenados         	103     	9     	2.60        	717 
 renacer entre las cenizas     	121     	6     	1.00        	417 
 guardianes del olimpo         	115     	8     	5.00        	581 
-los ecos de la sombra         	122     	4     	1.61        	518 
+los ecos de la sombra         	122     	4     	1.63        	520 
 el portal del tiempo          	112     	3     	4.80        	679 
 la ultima luz                 	108     	7     	4.50        	188 
 secretos del abismo           	121     	5     	2.00        	214 

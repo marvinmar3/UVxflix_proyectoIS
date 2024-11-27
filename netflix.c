@@ -21,16 +21,18 @@ void ordenarPorGenero(datos* pelis, int tam);
 void imprimirEstrellas(float calificacion);
 void ordenarPorCalificacion(datos* pelis, int tam);
 void imprimirGenero(int genero);
-void guardarEnHistorial(datos pelicula);
 void mostrarHistorial();
+void guardarHistorial(datos* historial, int tamHistorial);
+int cargarHistorial(datos** historial);
 
 int main() {
     
-    int tam = 0, i = 0, numResultados;
+    int tam, tamHistorial, i, numResultados;
     int* resultados; 
     datos* pelis = (datos*)malloc(tam * sizeof(datos));
-
+    datos* historial = NULL;
     tam = cargarLista(&pelis);
+    tamHistorial = cargarHistorial(&historial);
 
     char opc[10];
     int op;
@@ -99,8 +101,12 @@ int main() {
                 printf("%-30.30s\t%d\t\t%d\t", pelis[idx].nombre, pelis[idx].duracion, pelis[idx].genero);
                 imprimirEstrellas(pelis[idx].calificacion);
                 printf("\t\t%d\n", pelis[idx].vista);
+                
                 pelis[idx].vista++;
-                guardarEnHistorial(pelis[idx]);
+                tamHistorial++;
+                historial = (datos*)realloc(historial, tamHistorial * sizeof(datos));
+                historial[tamHistorial - 1] = pelis[idx];
+
                 float calif;
                 do
                 {
@@ -195,11 +201,16 @@ int main() {
                 }
             break;
             case 8:
-            mostrarHistorial();
+                printf("Historial de peliculas vistas:\n");
+                for (int i = 0; i < tamHistorial; i++) 
+                {
+                    printf("%-30.30s\t%d\t%d\t%.2f\t%d\n", historial[i].nombre, historial[i].duracion, historial[i].genero, historial[i].calificacion, historial[i].vista);
+                }
             break;
             case 9:
             break;
             case 10:
+                guardarHistorial(historial, tamHistorial);
                 printf("Gracias por utilizar nuestro programa. Adios!\n");
             break;
             default:
@@ -211,6 +222,7 @@ int main() {
     } while (op != 10);
 
     free(pelis);
+    free(historial);
     return 0;
 }
 
@@ -500,17 +512,22 @@ void imprimirGenero(int genero)
     }
 }
 
-void guardarEnHistorial(datos pelicula) 
+void guardarHistorial(datos* historial, int tamHistorial) 
 {
-    FILE *archivo = fopen("historial_pelis.txt", "a");
+    FILE* archivo = fopen("historial_pelis.txt", "w");
     if (archivo == NULL) 
     {
         printf("Error al abrir el archivo de historial.\n");
         return;
     }
 
-    fprintf(archivo, "%-30.30s\t%d\t%d\t%.2f\t%d\n", pelicula.nombre, pelicula.duracion, pelicula.genero, pelicula.calificacion, pelicula.vista);
+    for (int i = 0; i < tamHistorial; i++) 
+    {
+        fprintf(archivo, "%-30.30s\t%d\t%d\t%.2f\t%d\n", historial[i].nombre, historial[i].duracion, historial[i].genero, historial[i].calificacion, historial[i].vista);
+    }
+
     fclose(archivo);
+    printf("\nHistorial guardado correctamente.\n");
 }
 
 void mostrarHistorial() 
@@ -543,4 +560,34 @@ void mostrarHistorial()
     }
 
     fclose(archivo);
+}
+
+int cargarHistorial(datos** historial) 
+{
+    FILE *archivo = fopen("historial_pelis.txt", "r");
+    if (!archivo) 
+    {
+        return 0;
+    }
+    int tamHistorial = 0;
+    datos peliculaTemp;
+
+    while (fscanf(archivo, "%30[^\t]\t%d\t%d\t%f\t%d\n",
+                  peliculaTemp.nombre,
+                  &peliculaTemp.duracion,
+                  &peliculaTemp.genero,
+                  &peliculaTemp.calificacion,
+                  &peliculaTemp.vista) == 5) {
+        tamHistorial++;
+        *historial = realloc(*historial, tamHistorial * sizeof(datos));
+        if (!*historial) {
+            printf("Error al asignar memoria para el historial.\n");
+            fclose(archivo);
+            return tamHistorial;
+        }
+        (*historial)[tamHistorial - 1] = peliculaTemp;
+    }
+
+    fclose(archivo);
+    return tamHistorial;
 }
