@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define N 150
 
 typedef struct pelicula{
 	char nombre[31];
@@ -18,6 +19,10 @@ int cargarLista(datos **pelis);
 void eliminarPelicula(int *tam, datos **pelis, int *i);
 void ordenarPorGenero(datos* pelis, int tam);
 void imprimirEstrellas(float calificacion);
+void ordenarPorCalificacion(datos* pelis, int tam);
+void imprimirGenero(int genero);
+void guardarEnHistorial(datos pelicula);
+void mostrarHistorial();
 
 int main() {
     
@@ -95,6 +100,7 @@ int main() {
                 imprimirEstrellas(pelis[idx].calificacion);
                 printf("\t\t%d\n", pelis[idx].vista);
                 pelis[idx].vista++;
+                guardarEnHistorial(pelis[idx]);
                 float calif;
                 do
                 {
@@ -162,62 +168,38 @@ int main() {
                     if (pelis[i].genero != generoAnterior) 
                     {
                         generoAnterior = pelis[i].genero;
-            
-                        switch (generoAnterior) 
-                        {
-                            case 1: 
-                                printf("\n\t\t[**Accion**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n"); 
-                            break;
-                            case 2: 
-                                printf("\n\t\t[**Aventura**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            case 3: 
-                                printf("\n\t\t[**Comedia**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            case 4: 
-                                printf("\n\t\t[**Drama**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            case 5: 
-                                printf("\n\t\t[**Ciencia Ficcion**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            case 6: 
-                                printf("\n\t\t[**Terror**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            case 7: 
-                                printf("\n\t\t[**Romantica**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            case 8: 
-                                printf("\n\t\t[**Misterio**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            case 9: 
-                                printf("\n\t\t[**Fantasia**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            case 10: 
-                                printf("\n\t\t[**Suspenso**]\n");
-                                printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
-                            break;
-                            default: 
-                            break;
-                        }
+                        imprimirGenero(generoAnterior);
                     }
-        
                     printf("%-30.30s\t%d\t\t", pelis[i].nombre, pelis[i].duracion);
                     imprimirEstrellas(pelis[i].calificacion);
                     printf("\t\t%d\n", pelis[i].vista);
                 }
-            break;
+                break;
             case 7:
+                if (tam == 0) 
+                {
+                    printf("No hay peliculas registradas en el sistema.\n");
+                    break;
+                }
+
+                ordenarPorCalificacion(pelis, tam);
+
+                printf("TOP 10 Peliculas mejor valoradas:\n");
+                printf("PUESTO\tNOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n");
+
+                for (int i = 0; i < 10; i++) 
+                {
+                    printf("#%d\t%-30.30s\t%d\t\t%d\t", i+1, pelis[i].nombre, pelis[i].duracion, pelis[i].genero);
+                    imprimirEstrellas(pelis[i].calificacion);
+                    printf("\t\t%d\n", pelis[i].vista);
+                }
             break;
             case 8:
+            mostrarHistorial();
+            break;
+            case 9:
+            break;
+            case 10:
                 printf("Gracias por utilizar nuestro programa. Adios!\n");
             break;
             default:
@@ -226,13 +208,14 @@ int main() {
         }
         printf("\nPresione ENTER para continuar...");
         getchar();
-    } while (op != 8);
+    } while (op != 10);
 
     free(pelis);
     return 0;
 }
 
-void menu(void){
+void menu(void)
+{
 	printf("* * * * * * * * * * * * * * * * * * * * * *\n");
 	printf("*            --   UVtflix   --            *\n");
 	printf("*                                         *\n");
@@ -244,12 +227,15 @@ void menu(void){
 	printf("*    Eliminar pelicula            -> 5    *\n");
 	printf("*    Mostrar peliculas por genero -> 6    *\n");
     printf("*    Mostrar top 10               -> 7    *\n");
-    printf("*    Salir                        -> 8    *\n");
+    printf("*    Mostrar historial del usuario-> 8    *\n");
+    printf("*    Quitar primera pelicula vista-> 9    *\n");
+    printf("*    Salir                        -> 10   *\n");
 	printf("* * * * * * * * * * * * * * * * * * * *\n\n");
 	printf("Opcion: ");
 }
 
-void registro(int i, datos *pelis) {
+void registro(int i, datos *pelis) 
+{
     int j;
     
     printf("Ingrese los datos de la pelicula segun se indique:\n\n");
@@ -287,7 +273,8 @@ void registro(int i, datos *pelis) {
 	printf("\nPelicula registrada correctamente.\n");
 }
 
-int* busqueda(int tam, datos* pelis, int* numResultados) {
+int* busqueda(int tam, datos* pelis, int* numResultados) 
+{
     char busq[30];
     printf("Ingrese parte del nombre de la pelicula: ");
     fgets(busq, sizeof(busq), stdin);
@@ -311,7 +298,8 @@ int* busqueda(int tam, datos* pelis, int* numResultados) {
     return indices;
 }
 
-void guardarLista(datos *pelis, int tam) {
+void guardarLista(datos *pelis, int tam) 
+{
     FILE *archivo;
     archivo = fopen("lista_pelis.txt", "w");
     if (archivo == NULL) {
@@ -325,10 +313,10 @@ void guardarLista(datos *pelis, int tam) {
     }
 
     fclose(archivo);
-    printf("\nLista de peliculas guardada correctamente en 'lista_pelis.txt'.\n");
 }
 
-int cargarLista(datos **pelis) {
+int cargarLista(datos **pelis) 
+{
     FILE *archivo;
     int tam = 0;
     datos peliculaTemp;
@@ -360,7 +348,8 @@ int cargarLista(datos **pelis) {
 }
 
 
-void eliminarPelicula(int *tam, datos **pelis, int *i) {
+void eliminarPelicula(int *tam, datos **pelis, int *i) 
+{
     int numResultados;
     int* resultados = busqueda(*tam, *pelis, &numResultados);
 
@@ -408,8 +397,8 @@ void eliminarPelicula(int *tam, datos **pelis, int *i) {
     free(resultados);
 }
 
-
-void ordenarPorGenero(datos* pelis, int tam) {
+void ordenarPorGenero(datos* pelis, int tam) 
+{
     int maxGenero = 0;
 
     for (int i = 0; i < tam; i++) {
@@ -453,11 +442,105 @@ void ordenarPorGenero(datos* pelis, int tam) {
     free(output);
 }
 
-void imprimirEstrellas(float calificacion) {
+void imprimirEstrellas(float calificacion) 
+{
     int estrellas = (int)(calificacion + 0.5);
     for (int i = 0; i < 5; i++) 
     {
         if (i < estrellas)
             printf("*");
     }
+}
+
+void ordenarPorCalificacion(datos* pelis, int tam) 
+{
+    datos temp[N];
+    
+    void merge(datos* pelis, int inicio, int medio, int fin) {
+        int i = inicio, j = medio + 1, k = inicio;
+
+        while (i <= medio && j <= fin) {
+            if (pelis[i].calificacion >= pelis[j].calificacion) {
+                temp[k++] = pelis[i++];
+            } else {
+                temp[k++] = pelis[j++];
+            }
+        }
+        while (i <= medio) {
+            temp[k++] = pelis[i++];
+        }
+        while (j <= fin) {
+            temp[k++] = pelis[j++];
+        }
+        for (i = inicio; i <= fin; i++) {
+            pelis[i] = temp[i];
+        }
+    }
+
+    void mergeSort(datos* pelis, int inicio, int fin) {
+        if (inicio < fin) {
+            int medio = (inicio + fin) / 2;
+            mergeSort(pelis, inicio, medio);
+            mergeSort(pelis, medio + 1, fin);
+            merge(pelis, inicio, medio, fin);
+        }
+    }
+
+    mergeSort(pelis, 0, tam - 1);
+}
+
+void imprimirGenero(int genero) 
+{
+    const char* generos[] = {"Accion", "Aventura", "Comedia", "Drama", "Ciencia Ficcion", "Terror", "Romantica", "Misterio", "Fantasia", "Suspenso"};
+
+    if (genero >= 1 && genero <= 10) 
+    {
+        printf("\n\t\t[**%s**]\n", generos[genero - 1]);
+        printf("NOMBRE\t\t\t\tDURACION\tCALIFICACION\tVISTAS\n");
+    }
+}
+
+void guardarEnHistorial(datos pelicula) 
+{
+    FILE *archivo = fopen("historial_pelis.txt", "a");
+    if (archivo == NULL) 
+    {
+        printf("Error al abrir el archivo de historial.\n");
+        return;
+    }
+
+    fprintf(archivo, "%-30.30s\t%d\t%d\t%.2f\t%d\n", pelicula.nombre, pelicula.duracion, pelicula.genero, pelicula.calificacion, pelicula.vista);
+    fclose(archivo);
+}
+
+void mostrarHistorial() 
+{
+    FILE *archivo = fopen("historial_pelis.txt", "r");
+    if (archivo == NULL) 
+    {
+        printf("No hay peliculas vistas en el historial.\n");
+        return;
+    }
+
+    datos peliculaTemp;
+    int esPrimera = 1;
+
+    printf("PELICULAS VISTAS HASTA EL MOMENTO:\n\n");
+    
+
+    while (fscanf(archivo, "%30[^\t]\t%d\t%d\t%f\t%d\n", peliculaTemp.nombre, &peliculaTemp.duracion, &peliculaTemp.genero, &peliculaTemp.calificacion, &peliculaTemp.vista) == 5) 
+    {
+        if (esPrimera) 
+        {
+            printf("-> PRIMERA PELICULA VISTA: %s\n\n ", peliculaTemp.nombre);
+            printf("PELICULAS VISTAS HASTA EL MOMENTO:\n\n");
+            printf("NOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n");
+            esPrimera = 0;
+        }
+        printf("%-30.30s\t%d\t\t%d\t", peliculaTemp.nombre, peliculaTemp.duracion, peliculaTemp.genero);
+        imprimirEstrellas(peliculaTemp.calificacion);
+        printf("\t\t%d\n", peliculaTemp.vista);
+    }
+
+    fclose(archivo);
 }
