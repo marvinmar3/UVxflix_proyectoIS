@@ -201,10 +201,19 @@ int main() {
                 }
             break;
             case 8:
-                printf("Historial de peliculas vistas:\n");
+                printf("Historial de peliculas vistas:\n\n");
+                int primera=1;
                 for (int i = 0; i < tamHistorial; i++) 
                 {
-                    printf("%-30.30s\t%d\t%d\t%.2f\t%d\n", historial[i].nombre, historial[i].duracion, historial[i].genero, historial[i].calificacion, historial[i].vista);
+                    if(primera)
+                    {
+                        printf("Primera pelicula vista por el usuario: %s\n\n",historial[i].nombre);
+                        printf("PUESTO\tNOMBRE\t\t\t\tDURACION\tGENERO\tCALIFICACION\tVISTAS\n");
+                        primera = 0;
+                    }
+                    printf("%d\t%-30.30s\t%d\t\t%d\t", i+1, historial[i].nombre, historial[i].duracion, historial[i].genero);
+                    imprimirEstrellas(pelis[i].calificacion);
+                    printf("\t\t%d\n", pelis[i].vista);
                 }
             break;
             case 9:
@@ -468,23 +477,28 @@ void ordenarPorCalificacion(datos* pelis, int tam)
 {
     datos temp[N];
     
-    void merge(datos* pelis, int inicio, int medio, int fin) {
+    void merge(datos* pelis, int inicio, int medio, int fin) 
+    {
         int i = inicio, j = medio + 1, k = inicio;
 
-        while (i <= medio && j <= fin) {
+        while (i <= medio && j <= fin) 
+        {
             if (pelis[i].calificacion >= pelis[j].calificacion) {
                 temp[k++] = pelis[i++];
-            } else {
+            } else 
+            {
                 temp[k++] = pelis[j++];
             }
         }
-        while (i <= medio) {
+        while (i <= medio) 
+        {
             temp[k++] = pelis[i++];
         }
         while (j <= fin) {
             temp[k++] = pelis[j++];
         }
-        for (i = inicio; i <= fin; i++) {
+        for (i = inicio; i <= fin; i++) 
+        {
             pelis[i] = temp[i];
         }
     }
@@ -572,12 +586,8 @@ int cargarHistorial(datos** historial)
     int tamHistorial = 0;
     datos peliculaTemp;
 
-    while (fscanf(archivo, "%30[^\t]\t%d\t%d\t%f\t%d\n",
-                  peliculaTemp.nombre,
-                  &peliculaTemp.duracion,
-                  &peliculaTemp.genero,
-                  &peliculaTemp.calificacion,
-                  &peliculaTemp.vista) == 5) {
+    while (fscanf(archivo, "%30[^\t]\t%d\t%d\t%f\t%d\n", peliculaTemp.nombre, &peliculaTemp.duracion,&peliculaTemp.genero, &peliculaTemp.calificacion, &peliculaTemp.vista) == 5) 
+    {
         tamHistorial++;
         *historial = realloc(*historial, tamHistorial * sizeof(datos));
         if (!*historial) {

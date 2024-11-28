@@ -1,3 +1,7 @@
 los ecos de la sombra         	122	4	1.62	520
 los vengadores                	116	7	1.68	793
 las sombras olvidadas         	109	3	2.00	346
+avatar                        	105	4	4.50	913
+cazadores del abismo          	119	4	1.80	673
+harry potter                  	109	3	2.80	521
+harry potter                  	109	3	2.80	522
