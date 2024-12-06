@@ -24,6 +24,8 @@ void imprimirGenero(int genero);
 void mostrarHistorial();
 void guardarHistorial(datos* historial, int tamHistorial);
 int cargarHistorial(datos** historial);
+int mochila(datos* pelis, int tam, int tiempoMax, int* indicesSeleccionados);
+void eliminarPrimeraPelicula(int* tamHistorial, datos** historial);
 
 int main() {
     
@@ -217,8 +219,45 @@ int main() {
                 }
             break;
             case 9:
+                eliminarPrimeraPelicula(&tamHistorial, &historial);
             break;
             case 10:
+                if (tam == 0) 
+                {
+                printf("No hay películas registradas en el sistema.\n");
+                break;
+                }
+
+                int tiempoMax;
+                printf("Ingrese el tiempo maximo (en minutos) para su maraton: ");
+                do
+                {
+                    scanf("%d", &tiempoMax);
+                    getchar();
+
+                    if (tiempoMax <= 0) 
+                    {
+                    printf("Por favor ingrese una cantidad de tiempo valida\n");
+                    }
+                }while (tiempoMax <=0);
+
+                int* indicesSeleccionados = (int*)malloc(tam * sizeof(int));
+
+                int mejorDuracion = mochila(pelis, tam, tiempoMax, indicesSeleccionados);
+
+                printf("\nSu seleccion de peliculas para un tiempo maximo de %d minutos es:\n", tiempoMax);
+                printf("NOMBRE\t\t\t\tDURACION\n");
+
+                for (int i = 0; i < tam && indicesSeleccionados[i] != -1; i++) 
+                {
+                    int idx = indicesSeleccionados[i];
+                    printf("%-30.30s\t%d\n", pelis[idx].nombre, pelis[idx].duracion);
+                }
+
+                printf("\nDuracion total: %d minutos.\n", mejorDuracion);
+                free(indicesSeleccionados);
+            break;
+            case 11:
                 guardarHistorial(historial, tamHistorial);
                 printf("Gracias por utilizar nuestro programa. Adios!\n");
             break;
@@ -228,7 +267,7 @@ int main() {
         }
         printf("\nPresione ENTER para continuar...");
         getchar();
-    } while (op != 10);
+    } while (op != 11);
 
     free(pelis);
     free(historial);
@@ -250,8 +289,9 @@ void menu(void)
     printf("*    Mostrar top 10               -> 7    *\n");
     printf("*    Mostrar historial del usuario-> 8    *\n");
     printf("*    Quitar primera pelicula vista-> 9    *\n");
-    printf("*    Salir                        -> 10   *\n");
-	printf("* * * * * * * * * * * * * * * * * * * *\n\n");
+    printf("*    Ver maraton                  -> 10   *\n");
+    printf("*    Salir                        -> 11   *\n");
+	printf("* * * * * * * * * * * * * * * * * * * * * *\n\n");
 	printf("Opcion: ");
 }
 
@@ -599,5 +639,77 @@ int cargarHistorial(datos** historial)
     }
 
     fclose(archivo);
+
     return tamHistorial;
+}
+
+int mochila(datos* pelis, int tam, int tiempoMax, int* indicesSeleccionados) 
+{
+    int dp[tam + 1][tiempoMax + 1];
+    int seleccion[tam + 1][tiempoMax + 1];
+
+    for (int i = 0; i < tam; i++) 
+    {
+        indicesSeleccionados[i] = -1;
+    }
+
+    for (int i = 0; i <= tam; i++) 
+    {
+        for (int w = 0; w <= tiempoMax; w++) 
+        {
+            if (i == 0 || w == 0) 
+            {
+                dp[i][w] = 0;
+                seleccion[i][w] = 0;
+            }
+            else if (pelis[i - 1].duracion <= w) 
+            {
+                if (pelis[i - 1].duracion + dp[i - 1][w - pelis[i - 1].duracion] > dp[i - 1][w]) 
+                {
+                    dp[i][w] = pelis[i - 1].duracion + dp[i - 1][w - pelis[i - 1].duracion];
+                    seleccion[i][w] = 1;
+                }
+                else 
+                {
+                    dp[i][w] = dp[i - 1][w];
+                    seleccion[i][w] = 0;
+                }
+            } 
+            else 
+            {
+                dp[i][w] = dp[i - 1][w];
+                seleccion[i][w] = 0;
+            }
+        }
+    }
+
+    int w = tiempoMax;
+    int numSeleccionados = 0;
+    for (int i = tam; i > 0; i--) 
+    {
+        if (seleccion[i][w]) 
+        {
+            indicesSeleccionados[numSeleccionados++] = i - 1;
+            w -= pelis[i - 1].duracion;
+        }
+    }
+    return dp[tam][tiempoMax];
+}
+
+void eliminarPrimeraPelicula(int* tamHistorial, datos** historial) 
+{
+    if (*tamHistorial == 0) 
+    {
+        printf("El historial está vacío. No hay películas para eliminar.\n");
+        return;
+    }
+
+    free((historial)[0]);
+
+    datos* temp = *historial;
+    *historial = *historial + 1;
+    (*tamHistorial)--;
+
+    free(temp);
+    printf("La primera película ha sido eliminada del historial.\n");
 }
